@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'outlinecompilation.apps.OutlinecompilationConfig',
     'ckeditor',
     'ckeditor_uploader',
-    'rest_framework'
+    'rest_framework',
+    'drf-yasg'
 ]
 
 MIDDLEWARE = [
