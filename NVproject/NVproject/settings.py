@@ -37,11 +37,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'outlinecompilation.apps.OutlinecompilationConfig',
+    'outline.apps.OutlineConfig',
     'ckeditor',
     'ckeditor_uploader',
     'rest_framework',
-    'drf-yasg'
+    'drf_yasg',
+    'oauth2_provider'
 ]
 
 MIDDLEWARE = [
@@ -87,11 +88,12 @@ DATABASES = {
     }
 }
 
-MEDIA_ROOT = '%s/outlinecompilation/static/' % BASE_DIR
+MEDIA_ROOT = '%s/outline/static/' % BASE_DIR
 
-AUTH_USER_MODEL = 'outlinecompilation.User'
+AUTH_USER_MODEL = 'outline.User'
 
 import pymysql
+
 pymysql.install_as_MySQLdb()
 
 # Image Storage
@@ -121,6 +123,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    )
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -141,3 +149,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CLIENT_ID = 'gyzcs1JQNcblWDEVTtZTYLKIVJTHIRaMoBgXvG9Y'
+CLIENT_SECRET = 'RP3HGEKvuRwJrN086B9XNAN7lcJXMMJk4h2t2ToHmChGJ7yDVaH27SleunLMF3eg4C73qBcHAeKAuqQnXVBpiVd6nDDEo4Wv6Vm4EdIfCJR8SH9ZwafqAp1VVVYQ6F6L'

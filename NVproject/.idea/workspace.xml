@@ -1,18 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="ecb3f29b-3019-4a10-b62e-a6a6aef19a7e" name="Changes" comment="" />
+    <list default="true" id="ecb3f29b-3019-4a10-b62e-a6a6aef19a7e" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/../.idea/ModernProgrammingLearning.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/ModernProgrammingLearning.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NVproject/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/NVproject/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NVproject/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/NVproject/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/migrations/0001_initial.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/migrations/0002_chuandauramonhoc_chuong_decuongmonhoc_khoa_nganh_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/migrations/0003_remove_monhoc_mon_hoc_truoc_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/migrations/0004_alter_giangvien_options_alter_sinhvien_options_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/migrations/0005_rename_tenhoclieu_hoclieu_ten_hoc_lieu_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/migrations/0006_chuandauractdt_loaicdrctdt_diem_active_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/migrations/0007_remove_chuandauramonhoc_muc_tieu_mon_hoc_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/migrations/0008_muctieumonhoc_chuan_dau_ra_ctdt_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/migrations/0009_chuandauractdt_stt_loaicdrctdt_stt.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/migrations/0010_chuandauramonhoc_stt_decuongmonhoc_nam_bien_soan_and_more.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/serializers.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/outlinecompilation/views.py" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2ep2JDp5rGmmVw7WudMfSP29VdE" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -23,7 +59,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/HP/Desktop/ModernProgrammingLearning",
+    "last_opened_file_path": "C:/Users/HP/Desktop/ModernProgrammingLearning/CompileMobile",
     "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
   }
 }]]></component>
