@@ -3,8 +3,8 @@ from rest_framework import viewsets, generics, status, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from outline import serializers, paginators
-from outline.models import User, DeCuongMonHoc, GiangVien
+from outline import serializers, paginators, permissions
+from outline.models import User, DeCuongMonHoc, GiangVien, SinhVien
 
 
 # Create your views here.
@@ -31,9 +31,14 @@ class UserViewSet(viewsets.ViewSet, generics.CreateAPIView):
 
 
 class OutlineViewSet(viewsets.ViewSet, generics.ListAPIView):
-    queryset = DeCuongMonHoc.objects.prefetch_related('muctieumonhoc_set').all()
+    queryset = DeCuongMonHoc.objects.all()
     serializer_class = serializers.OutlineSerializer
     # permission_classes = [permissions.IsAuthenticated]
+
+    def get_permissions(self):
+        if self.action in ["edit_outline"]:
+            return [permissions.LectureOwnerAuthentication()]
+        return [permissions.AllowAny()]
 
     @action(methods=['post'], url_path='compile', detail=False)
     def compile_outline(self, request):
@@ -46,4 +51,21 @@ class OutlineViewSet(viewsets.ViewSet, generics.ListAPIView):
             return Response(serializers.OutlineSerializer(outline).data, status=status.HTTP_201_CREATED)
         return Response(status=status.HTTP_403_FORBIDDEN)
 
+    @action(methods=["patch"], detail=True, url_path="edit")
+    def edit_outline(self, pk, request):
+        outline = DeCuongMonHoc.objects.filter(pk=pk)
+        if outline:
+            for k, v in request.data.items():
+                setattr(outline, k, v)
+            return Response(serializers.OutlineSerializer(outline).data)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
+
+class LecturerViewSet(viewsets.ViewSet, generics.ListAPIView):
+    queryset = GiangVien.objects.filter(is_active=True).all()
+    serializer_class = serializers.LecturerSerializer
+
+
+class StudentViewSet(viewsets.ViewSet, generics.ListAPIView):
+    queryset = SinhVien.objects.filter(is_active=True).all()
+    serializer_class = serializers.StudentSerializer
