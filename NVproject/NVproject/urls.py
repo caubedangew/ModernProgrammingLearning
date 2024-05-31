@@ -23,11 +23,11 @@ from outline.admin import admin_site
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Course API",
+        title="Outline API",
         default_version='v1',
-        description="APIs for CourseApp",
-        contact=openapi.Contact(email="thanh.dh@ou.edu.vn"),
-        license=openapi.License(name="Dương Hữu Thành@2021"),
+        description="APIs for Outline Compilation",
+        contact=openapi.Contact(email="2151053068vu@ou.edu.vn"),
+        license=openapi.License(name="NguyenHuuNghia_LeTranThienVu@2024"),
     ),
     public=True,
     permission_classes=(permissions.AllowAny,),
@@ -36,6 +36,7 @@ schema_view = get_schema_view(
 urlpatterns = [
     path('', include('outline.urls')),
     path('admin/', admin_site.urls),
+    re_path(r'^ckeditor/', include('ckeditor_uploader.urls')),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0),
             name='schema-json'),

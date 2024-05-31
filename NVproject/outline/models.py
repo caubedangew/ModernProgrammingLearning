@@ -17,6 +17,10 @@ class User(AbstractUser):
     date_of_birth = models.DateField(null=True)
     address = models.CharField(max_length=255, null=True)
 
+    def get_full_name(self):
+        full_name = "%s %s" % (self.last_name, self.first_name)
+        return full_name.strip()
+
     def __str__(self):
         return self.get_full_name()
 
@@ -62,6 +66,7 @@ class Khoa(BaseModel):
 class Nganh(BaseModel):
     ten_nganh = models.CharField(max_length=50)
     khoa = models.ForeignKey(Khoa, on_delete=models.RESTRICT)
+    loaiCDRCTDT = models.ManyToManyField('LoaiCDRCTDT')
 
     def __str__(self):
         return self.ten_nganh
@@ -71,6 +76,7 @@ class MonHoc(BaseModel):
     ten_mon_hoc = models.CharField(max_length=100)
     ten_mon_hoc_ta = models.CharField(max_length=100)
     thuoc_khoi_kien_thuc = models.CharField(max_length=50)
+    so_tin_chi = models.FloatField(default=0)
     so_tin_chi_thuc_hanh = models.FloatField(default=0)
     so_tin_chi_ly_thuyet = models.FloatField(default=0)
     so_tin_chi_tu_hoc = models.FloatField(default=0)
@@ -97,6 +103,7 @@ class DeCuongMonHoc(BaseModel):
     phuong_phap_giang_day_hoc_tap = RichTextField()
     giang_vien_bien_soan = models.ForeignKey(GiangVien, on_delete=models.PROTECT)
     mon_hoc = models.ForeignKey(MonHoc, on_delete=models.RESTRICT)
+    hoc_lieu = models.ManyToManyField('HocLieu')
 
     def __str__(self):
         return self.mon_hoc.__str__() + " - " + self.giang_vien_bien_soan.__str__() + " - " + self.created_date.year.__str__()
@@ -107,6 +114,7 @@ class KeHoachGiangDay(BaseModel):
     noi_dung_chuong = RichTextField()
     de_cuong_mon_hoc = models.ForeignKey(DeCuongMonHoc, on_delete=models.CASCADE)
     chuong = models.ForeignKey(Chuong, on_delete=models.CASCADE)
+    hoc_lieu = models.ManyToManyField('HocLieu')
 
     def __str__(self):
         return "Tuần %s - %s - %s" % (self.tuan.__str__(), self.chuong.__str__(), self.de_cuong_mon_hoc.__str__())
@@ -114,8 +122,8 @@ class KeHoachGiangDay(BaseModel):
 
 class HoatDongDayVaHoc(BaseModel):
     so_tiet = models.FloatField(default=0)
-    congViec = RichTextField()
-    loaiHoatDong = models.CharField(max_length=30)
+    cong_viec = RichTextField()
+    loai_hoat_dong = models.CharField(max_length=30)
     ke_hoach_giang_day = models.ForeignKey(KeHoachGiangDay, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -125,7 +133,6 @@ class HoatDongDayVaHoc(BaseModel):
 class LoaiCDRCTDT(BaseModel):
     stt = models.IntegerField(default=0)
     ten_loai = models.CharField(max_length=255)
-    nganh = models.ManyToManyField(Nganh)
 
     def __str__(self):
         return self.ten_loai
@@ -157,6 +164,7 @@ class MucTieuMonHoc(MoTaModel):
 
 class ChuanDauRaMonHoc(MoTaModel):
     muc_tieu_mon_hoc = models.ForeignKey(MucTieuMonHoc, on_delete=models.CASCADE)
+    diem = models.ManyToManyField('Diem')
 
     def __str__(self):
         return "CO" + self.stt.__str__() + " - " + self.muc_tieu_mon_hoc.__str__()
@@ -164,8 +172,6 @@ class ChuanDauRaMonHoc(MoTaModel):
 
 class HocLieu(BaseModel):
     ten_hoc_lieu = models.CharField(max_length=500)
-    ke_hoach_giang_day = models.ManyToManyField(KeHoachGiangDay)
-    de_cuong_mon_hoc = models.ManyToManyField(DeCuongMonHoc)
 
     def __str__(self):
         return self.ten_hoc_lieu
@@ -179,8 +185,13 @@ class Diem(BaseModel):
     ty_trong = models.FloatField(default=0)
     hinh_thuc_danh_gia = models.CharField(max_length=50)
     de_cuong_mon_hoc = models.ForeignKey(DeCuongMonHoc, on_delete=models.CASCADE)
-    chuan_dau_ra_mon_hoc = models.ManyToManyField(ChuanDauRaMonHoc)
     phan_loai = models.CharField(max_length=2, choices=PhanLoaiDiem.choices)
 
     def __str__(self):
         return self.phan_loai.__str__() + " - " + self.hinh_thuc_danh_gia.__str__() + " - " + self.de_cuong_mon_hoc.__str__()
+
+
+class Comment(BaseModel):
+    content = RichTextField(max_length=255)
+    outline = models.ForeignKey(DeCuongMonHoc, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)

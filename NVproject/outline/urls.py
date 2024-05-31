@@ -5,6 +5,7 @@ from outline import views
 r = routers.DefaultRouter()
 r.register('users', views.UserViewSet, 'users')
 r.register('outlines', views.OutlineViewSet, 'outlines')
+r.register('outlines', views.OutlineDetailViewSet, 'outlineDetails')
 r.register('lecturers', views.LecturerViewSet, 'lecturers')
 r.register('students', views.StudentViewSet, 'students')
 
