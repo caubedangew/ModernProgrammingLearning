@@ -16,7 +16,7 @@ class User(AbstractUser):
 
     username = models.CharField(max_length=20, null=True, unique=True)
     password = models.CharField(max_length=255, null=True)
-    user_role = models.IntegerField(VaiTro)
+    user_role = models.IntegerField(VaiTro, null=True)
     avatar = CloudinaryField()
     sex = models.BooleanField(default=True)
     date_of_birth = models.DateField(null=True)
