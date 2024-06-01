@@ -8,10 +8,15 @@ from cloudinary.models import CloudinaryField
 # Create your models here.
 class User(AbstractUser):
     class VaiTro(models.IntegerChoices):
-        User = 1
-        SinhVien = 2
-        GiangVien = 3
-    user_role = models.IntegerField(VaiTro, default=1)
+        SinhVien = 1
+        GiangVien = 2
+
+        def __str__(self):
+            return self.name
+
+    username = models.CharField(max_length=20, null=True, unique=True)
+    password = models.CharField(max_length=255, null=True)
+    user_role = models.IntegerField(VaiTro)
     avatar = CloudinaryField()
     sex = models.BooleanField(default=True)
     date_of_birth = models.DateField(null=True)
@@ -32,16 +37,16 @@ class User(AbstractUser):
 
 
 class GiangVien(User):
-    title = models.CharField(max_length=100)
-    degree = models.CharField(max_length=30)
-    khoa = models.ForeignKey('Khoa', on_delete=models.PROTECT)
+    title = models.CharField(max_length=100, null=True)
+    degree = models.CharField(max_length=30, null=True)
+    khoa = models.ForeignKey('Khoa', on_delete=models.PROTECT, null=True)
 
     class Meta:
         verbose_name = "Giang vien"
 
 
 class SinhVien(User):
-    nganh = models.ForeignKey('Nganh', on_delete=models.PROTECT)
+    nganh = models.ForeignKey('Nganh', on_delete=models.PROTECT, null=True)
 
     class Meta:
         verbose_name = "Sinh vien"
@@ -182,6 +187,9 @@ class Diem(BaseModel):
         QuaTrinh = 'QT'
         GiuaKy = 'GK'
         CuoiKy = 'CK'
+
+        def __str__(self):
+            return self.name
     ty_trong = models.FloatField(default=0)
     hinh_thuc_danh_gia = models.CharField(max_length=50)
     de_cuong_mon_hoc = models.ForeignKey(DeCuongMonHoc, on_delete=models.CASCADE)
