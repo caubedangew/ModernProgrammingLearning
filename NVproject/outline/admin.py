@@ -1,4 +1,3 @@
-from django import forms
 from django.contrib import admin
 
 from outline.models import (User, GiangVien, SinhVien, Khoa, Nganh, MonHoc, Chuong,

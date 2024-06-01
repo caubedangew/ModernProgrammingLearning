@@ -1,10 +1,9 @@
-from django.shortcuts import render
 from rest_framework import viewsets, generics, status, permissions, parsers
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from outline import serializers, paginators, permission
-from outline.models import User, DeCuongMonHoc, GiangVien, SinhVien
+from outline.models import User, DeCuongMonHoc, GiangVien, SinhVien, Comment
 from outline.serializers import StudentDetailSerializer
 
 
@@ -81,9 +80,9 @@ class OutlineViewSet(viewsets.ViewSet, generics.ListAPIView):
     @action(methods=['post'], url_path='compile', detail=False)
     def compile_outline(self, request):
         outline = self.get_object().create(giang_vien_bien_soan=request.user,
-                                               mon_hoc_id=request.data.get("mon_hoc"),
-                                               phuong_phap_giang_day_hoc_tap=
-                                               request.data.get("phuong_phap_giang_day_hoc_tap"))
+                                           mon_hoc_id=request.data.get("mon_hoc"),
+                                           phuong_phap_giang_day_hoc_tap=
+                                           request.data.get("phuong_phap_giang_day_hoc_tap"))
         return Response(serializers.OutlineSerializer(outline).data, status=status.HTTP_201_CREATED)
 
     @action(methods=["patch"], detail=True, url_path="edit")
@@ -114,7 +113,7 @@ class LecturerDetailViewSet(viewsets.ViewSet, generics.RetrieveAPIView):
 
 
 class StudentViewSet(viewsets.ViewSet, generics.ListAPIView):
-    queryset = SinhVien.objects.filter(is_active=True).all()
+    queryset = SinhVien.objects.filter(is_active=True)
     serializer_class = serializers.StudentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -123,3 +122,10 @@ class StudentDetailViewSet(viewsets.ViewSet, generics.RetrieveAPIView):
     queryset = StudentViewSet.queryset
     serializer_class = StudentDetailSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+
+class CommentViewSet(viewsets.ViewSet, generics.UpdateAPIView, generics.DestroyAPIView):
+    queryset = Comment.objects.filter(active=True)
+    serializer_class = serializers.CommentSerializer
+    permission_classes = [permission.CommentOwnerAuthorization]
+

@@ -8,6 +8,7 @@ r.register('outlines', views.OutlineViewSet, 'outlines')
 r.register('outlines', views.OutlineDetailViewSet, 'outlineDetails')
 r.register('lecturers', views.LecturerViewSet, 'lecturers')
 r.register('students', views.StudentViewSet, 'students')
+r.register('comments', views.CommentViewSet, 'comments')
 
 urlpatterns = [
     path('', include(r.urls)),

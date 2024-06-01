@@ -1,8 +1,5 @@
 from rest_framework import serializers
-from rest_framework.exceptions import ValidationError
-
-from outline.models import User, DeCuongMonHoc, MucTieuMonHoc, ChuanDauRaCTDT, KeHoachGiangDay, Diem, MonHoc, GiangVien, \
-    SinhVien, Comment, HocLieu
+from outline.models import User, DeCuongMonHoc, MonHoc, GiangVien, SinhVien, Comment, HocLieu
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -15,7 +12,7 @@ class ItemSerializer(serializers.ModelSerializer):
 class UserSerializer(ItemSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', ]
+        fields = ['first_name', 'last_name', 'email', 'avatar', 'sex', 'date_of_birth', 'address', 'user_role']
         extra_kwargs = {
             'password': {
                 'write_only': True
