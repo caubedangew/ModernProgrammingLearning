@@ -139,7 +139,7 @@ class LoaiCDRCTDT(BaseModel):
     ten_loai = models.CharField(max_length=255)
 
     def __str__(self):
-        return self.ten_loai
+        return "%s - %s" % (str(self.stt), self.ten_loai)
 
 
 class MoTaModel(BaseModel):
@@ -155,7 +155,7 @@ class ChuanDauRaCTDT(MoTaModel):
     nganh = models.ForeignKey(Nganh, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.stt.__str__() + " - " + self.nganh.__str__()
+        return "PLO%s.%s - %s" % (self.loaicdrctdt.__str__().strip('-'), self.stt.__str__(), self.nganh.__str__())
 
 
 class MucTieuMonHoc(MoTaModel):
@@ -163,7 +163,7 @@ class MucTieuMonHoc(MoTaModel):
     chuan_dau_ra_ctdt = models.ManyToManyField(ChuanDauRaCTDT)
 
     def __str__(self):
-        return self.stt.__str__() + " - " + self.de_cuong_mon_hoc.__str__()
+        return "CO%s - %s" % (self.stt.__str__(), self.de_cuong_mon_hoc.__str__())
 
 
 class ChuanDauRaMonHoc(MoTaModel):
@@ -171,7 +171,7 @@ class ChuanDauRaMonHoc(MoTaModel):
     diem = models.ManyToManyField('Diem')
 
     def __str__(self):
-        return "CO" + self.stt.__str__() + " - " + self.muc_tieu_mon_hoc.__str__()
+        return "CLO%s - %s" % (self.stt.__str__(), + self.muc_tieu_mon_hoc.__str__())
 
 
 class HocLieu(BaseModel):
