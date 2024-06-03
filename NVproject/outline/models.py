@@ -2,7 +2,6 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from ckeditor.fields import RichTextField
-from cloudinary.models import CloudinaryField
 
 
 # Create your models here.
@@ -17,7 +16,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=20, null=True, unique=True)
     password = models.CharField(max_length=255, null=True)
     user_role = models.IntegerField(VaiTro, null=True)
-    avatar = CloudinaryField()
+    avatar = models.ImageField(upload_to="outline/%Y/%m")
     sex = models.BooleanField(default=True)
     date_of_birth = models.DateField(null=True)
     address = models.CharField(max_length=255, null=True)

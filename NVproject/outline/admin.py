@@ -19,7 +19,7 @@ class UserAdmin(admin.ModelAdmin):
 
     def avatar(self, obj):
         if obj:
-            return mark_safe(f'<img src="{obj.avatar}" width="120" />')
+            return mark_safe(f'<img src="/static/{obj.avatar}" width="120" />')
 
 
 class LecturerAdmin(admin.ModelAdmin):
