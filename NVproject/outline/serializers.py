@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from outline.models import User, DeCuongMonHoc, MonHoc, GiangVien, SinhVien, Comment, HocLieu
+from outline.models import User, DeCuongMonHoc, MonHoc, GiangVien, SinhVien, Comment, HocLieu, Khoa, Nganh
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -28,28 +28,44 @@ class UserSerializer(ItemSerializer):
         return user
 
 
-class StudentSerializer(ItemSerializer):
+class FieldSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Nganh
+        fields = ["ten_nganh"]
+
+
+class StudentSerializer(serializers.ModelSerializer):
+    nganh = FieldSerializer()
+
     class Meta:
         model = SinhVien
-        fields = UserSerializer.Meta.fields + ["nganh", ]
+        fields = ['id', 'first_name', 'last_name', 'nganh', "email", "avatar"]
 
 
 class StudentDetailSerializer(ItemSerializer):
     class Meta:
         model = StudentSerializer.Meta.model
-        fields = StudentSerializer.Meta.fields + ["avatar"]
+        fields = StudentSerializer.Meta.fields + ["sex", "date_of_birth", 'address']
 
 
-class LecturerSerializer(ItemSerializer):
+class FacultySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Khoa
+        fields = ["ten_khoa"]
+
+
+class LecturerSerializer(serializers.ModelSerializer):
+    khoa = FacultySerializer()
+
     class Meta:
         model = GiangVien
-        fields = UserSerializer.Meta.fields + ["khoa"]
+        fields = ["id", "first_name", "last_name", "email", "khoa", 'avatar']
 
 
-class LecturerDetailSerializer(LecturerSerializer):
+class LecturerDetailSerializer(ItemSerializer):
     class Meta:
         model = LecturerSerializer.Meta.model
-        fields = LecturerSerializer.Meta.fields + ['avatar', 'title', 'degree']
+        fields = LecturerSerializer.Meta.fields + ["sex", "date_of_birth", 'address', 'title', 'degree']
 
 
 class SubjectSerializer(serializers.ModelSerializer):
@@ -103,10 +119,9 @@ class OutlineDetailSerializer(serializers.ModelSerializer):
         var = []
         for data in outline.muctieumonhoc_set.all():
             for d in data.chuandauramonhoc_set.all():
-                var.append([{"clo": d.__str__(), "dap_ung":
+                var.append({"clo": d.__str__(), "dap_ung":
                     [{"plo": da.chuan_dau_ra_ctdt.__str__(), "muc_do_dap_ung": da.muc_do_dap_ung}
-                     for da in d.mucdodapung_set.all()]
-                             }])
+                     for da in d.mucdodapung_set.all()]})
         return var
 
     def get_s(self, outline):

@@ -3,7 +3,8 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from outline import serializers, paginators, permission
-from outline.models import User, DeCuongMonHoc, GiangVien, SinhVien, Comment, MucTieuMonHoc, Diem, KeHoachGiangDay
+from outline.models import User, DeCuongMonHoc, GiangVien, SinhVien, Comment, MucTieuMonHoc, Diem, KeHoachGiangDay, \
+    ChuanDauRaMonHoc
 from outline.serializers import StudentDetailSerializer
 
 
@@ -86,7 +87,9 @@ class OutlineViewSet(viewsets.ViewSet, generics.ListAPIView):
                                            phuong_phap_giang_day_hoc_tap=
                                            data.get("phuong_phap_giang_day_hoc_tap"))
         for co in data.get("co"):
-            MucTieuMonHoc.objects.create(stt=co.stt, mo_ta=co.mo_ta, de_cuong_mon_hoc=outline)
+            muc_tieu_mon_hoc = MucTieuMonHoc.objects.create(stt=co.stt, mo_ta=co.mo_ta, de_cuong_mon_hoc=outline)
+            for clo in data.get("clo"):
+                muc_tieu_mon_hoc.chuandauramonhoc_set.create(stt=clo.stt, mo_ta=clo.mo_ta, )
         for hoc_lieu in data.get("hoc_lieu"):
             self.get_object().hoclieu_set.create(stt=hoc_lieu.stt, ten_hoc_lieu=hoc_lieu.ten_hoc_lieu)
         for s in data.get("s"):
