@@ -3,7 +3,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from outline import serializers, paginators, permission
-from outline.models import User, DeCuongMonHoc, GiangVien, SinhVien, Comment
+from outline.models import User, DeCuongMonHoc, GiangVien, SinhVien, Comment, MucTieuMonHoc, Diem, KeHoachGiangDay
 from outline.serializers import StudentDetailSerializer
 
 
@@ -35,6 +35,7 @@ class OutlineViewSet(viewsets.ViewSet, generics.ListAPIView):
     queryset = DeCuongMonHoc.objects.order_by("created_date", "-created_date")
     serializer_class = serializers.OutlineSerializer
     permission_classes = [permissions.IsAuthenticated()]
+    parser_classes = [parsers.JSONParser]
 
     def get_queryset(self):
         queryset = self.queryset
@@ -79,10 +80,21 @@ class OutlineViewSet(viewsets.ViewSet, generics.ListAPIView):
 
     @action(methods=['post'], url_path='compile', detail=False)
     def compile_outline(self, request):
+        data = request.data
         outline = self.get_object().create(giang_vien_bien_soan=request.user,
-                                           mon_hoc_id=request.data.get("mon_hoc"),
+                                           mon_hoc=data.get("mon_hoc"),
                                            phuong_phap_giang_day_hoc_tap=
-                                           request.data.get("phuong_phap_giang_day_hoc_tap"))
+                                           data.get("phuong_phap_giang_day_hoc_tap"))
+        for co in data.get("co"):
+            MucTieuMonHoc.objects.create(stt=co.stt, mo_ta=co.mo_ta, de_cuong_mon_hoc=outline)
+        for hoc_lieu in data.get("hoc_lieu"):
+            self.get_object().hoclieu_set.create(stt=hoc_lieu.stt, ten_hoc_lieu=hoc_lieu.ten_hoc_lieu)
+        for s in data.get("s"):
+            Diem.objects.create(ty_trong=s.ty_trong, hinh_thuc_danh_gia=s.hinh_thuc_danh_gia, phan_loai=s.phan_loai)
+        for tp in data.get("tp"):
+            KeHoachGiangDay.objects.create(tuan=tp.tuan, noi_dung_chuong=tp.noi_dung_chuong, de_cuong_mon_hoc=outline,
+                                           chuong_id=tp.chuong)
+
         return Response(serializers.OutlineSerializer(outline).data, status=status.HTTP_201_CREATED)
 
     @action(methods=["patch"], detail=True, url_path="edit")

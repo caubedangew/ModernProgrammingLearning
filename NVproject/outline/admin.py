@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from outline.models import (User, GiangVien, SinhVien, Khoa, Nganh, MonHoc, Chuong,
+from outline.models import (User, GiangVien, SinhVien, Khoa, Nganh, MonHoc, Chuong, MucDoDapUng,
                             DeCuongMonHoc, KeHoachGiangDay, HoatDongDayVaHoc, LoaiCDRCTDT,
                             ChuanDauRaCTDT, ChuanDauRaMonHoc, HocLieu, Diem, MucTieuMonHoc)
 from django.utils.html import mark_safe
@@ -109,3 +109,4 @@ admin_site.register(ChuanDauRaCTDT, )
 admin_site.register(ChuanDauRaMonHoc)
 admin_site.register(HocLieu, ReferenceAdmin)
 admin_site.register(Diem, ScoreAdmin)
+admin_site.register(MucDoDapUng)
