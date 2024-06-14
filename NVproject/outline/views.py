@@ -4,7 +4,7 @@ from rest_framework.response import Response
 
 from outline import serializers, paginators, permission
 from outline.models import User, DeCuongMonHoc, GiangVien, SinhVien, Comment, MucTieuMonHoc, Diem, KeHoachGiangDay, \
-    ChuanDauRaMonHoc
+    ChuanDauRaMonHoc, HocLieu, Chuong, ChuanDauRaCTDT
 from outline.serializers import StudentDetailSerializer
 
 
@@ -89,14 +89,17 @@ class OutlineViewSet(viewsets.ViewSet, generics.ListAPIView):
         for co in data.get("co"):
             muc_tieu_mon_hoc = MucTieuMonHoc.objects.create(stt=co.stt, mo_ta=co.mo_ta, de_cuong_mon_hoc=outline)
             for clo in data.get("clo"):
-                muc_tieu_mon_hoc.chuandauramonhoc_set.create(stt=clo.stt, mo_ta=clo.mo_ta, )
+                muc_tieu_mon_hoc.chuandauramonhoc_set.create(stt=clo.stt, mo_ta=clo.mo_ta)
         for hoc_lieu in data.get("hoc_lieu"):
             self.get_object().hoclieu_set.create(stt=hoc_lieu.stt, ten_hoc_lieu=hoc_lieu.ten_hoc_lieu)
         for s in data.get("s"):
             Diem.objects.create(ty_trong=s.ty_trong, hinh_thuc_danh_gia=s.hinh_thuc_danh_gia, phan_loai=s.phan_loai)
         for tp in data.get("tp"):
-            KeHoachGiangDay.objects.create(tuan=tp.tuan, noi_dung_chuong=tp.noi_dung_chuong, de_cuong_mon_hoc=outline,
+            teaching_plan = KeHoachGiangDay.objects.create(tuan=tp.tuan, noi_dung_chuong=tp.noi_dung_chuong, de_cuong_mon_hoc=outline,
                                            chuong_id=tp.chuong)
+            teaching_plan.hoc_lieu.get_or_create(stt=tp.stt, hoc_lieu__ten_hoc_lieu=tp.ten_hoc_lieu)
+            teaching_plan.chuan_dau_ra_mon_hoc.get_or_create()
+
 
         return Response(serializers.OutlineSerializer(outline).data, status=status.HTTP_201_CREATED)
 
@@ -143,4 +146,23 @@ class CommentViewSet(viewsets.ViewSet, generics.UpdateAPIView, generics.DestroyA
     queryset = Comment.objects.filter(active=True)
     serializer_class = serializers.CommentSerializer
     permission_classes = [permission.CommentOwnerAuthorization]
+
+
+class ReferencesViewSet(viewsets.ViewSet, generics.ListCreateAPIView):
+    queryset = HocLieu.objects.filter(active=True)
+    serializer_class = serializers.ReferencesSerializer
+    permission_classes = [permission.LecturerAuthorization]
+
+
+class ChapterViewSet(viewsets.ViewSet, generics.ListCreateAPIView):
+    queryset = Chuong.objects.filter(active=True)
+    serializer_class = serializers.ChapterSerializer
+    permission_classes = [permission.LecturerAuthorization]
+
+
+class ProgrammeLearningOutcomeViewSet(viewsets.ViewSet, generics.ListAPIView):
+    queryset = ChuanDauRaCTDT.objects.filter(active=True)
+    serializer_class = serializers.ProgrammeLearningOutcomeSerializer
+    permission_classes = [permission.LecturerAuthorization]
+
 

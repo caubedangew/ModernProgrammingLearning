@@ -114,7 +114,6 @@ class DeCuongMonHoc(BaseModel):
     phuong_phap_giang_day_hoc_tap = RichTextField()
     giang_vien_bien_soan = models.ForeignKey(GiangVien, on_delete=models.PROTECT)
     mon_hoc = models.ForeignKey(MonHoc, on_delete=models.RESTRICT)
-    hoc_lieu = models.ManyToManyField('HocLieu')
     quy_dinh = RichTextField()
 
     def __str__(self):
@@ -171,7 +170,7 @@ class ChuanDauRaCTDT(MoTaModel):
     nganh = models.ForeignKey(Nganh, on_delete=models.PROTECT)
 
     def __str__(self):
-        return "PLO%s.%s - %s" % (self.loaicdrctdt.__str__().strip('-')[0], str(self.stt), self.nganh.__str__())
+        return "PLO%s.%s - %s" % (str(self.loaicdrctdt.stt), str(self.stt), self.nganh.__str__())
 
 
 class MucTieuMonHoc(MoTaModel):
@@ -186,7 +185,7 @@ class ChuanDauRaMonHoc(MoTaModel):
     diem = models.ManyToManyField('Diem')
 
     def __str__(self):
-        return "CLO%s - %s" % (self.stt.__str__(), self.muc_tieu_mon_hoc.__str__())
+        return "CLO%s.%s - %s" % (str(self.muc_tieu_mon_hoc.stt), str(self.stt), self.muc_tieu_mon_hoc.de_cuong_mon_hoc.__str__())
 
 
 class MucDoDapUng(BaseModel):
@@ -206,10 +205,18 @@ class MucDoDapUng(BaseModel):
 
 class HocLieu(BaseModel):
     ten_hoc_lieu = models.CharField(max_length=500)
-    de_cuong_mon_hoc = models.ManyToManyField(DeCuongMonHoc)
 
     def __str__(self):
         return self.ten_hoc_lieu
+
+
+class HocLieu_DeCuongMonHoc(BaseModel):
+    de_cuong_mon_hoc = models.ForeignKey(DeCuongMonHoc, on_delete=models.CASCADE)
+    hoc_lieu = models.ForeignKey(HocLieu, on_delete=models.CASCADE)
+    stt = models.IntegerField(default=0)
+
+    def __str__(self):
+        return "[%s] %s - %s" % (str(self.stt), self.hoc_lieu.__str__(), self.de_cuong_mon_hoc.__str__())
 
 
 class Diem(BaseModel):

@@ -1,8 +1,8 @@
+import datetime
+
 from django.contrib import admin
 
-from outline.models import (User, GiangVien, SinhVien, Khoa, Nganh, MonHoc, Chuong, MucDoDapUng,
-                            DeCuongMonHoc, KeHoachGiangDay, HoatDongDayVaHoc, LoaiCDRCTDT,
-                            ChuanDauRaCTDT, ChuanDauRaMonHoc, HocLieu, Diem, MucTieuMonHoc)
+from outline.models import *
 from django.utils.html import mark_safe
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
@@ -86,6 +86,11 @@ class ReferenceAdmin(admin.ModelAdmin):
     search_fields = ["ten_hoc_lieu"]
 
 
+class Reference_OutlineAdmin(admin.ModelAdmin):
+    list_display = ["stt", "hoc_lieu", "de_cuong_mon_hoc", "created_date"]
+    search_fields = ["de_cuong_mon_hoc"]
+
+
 class ScoreAdmin(admin.ModelAdmin):
     list_display = ["de_cuong_mon_hoc", "phan_loai", "hinh_thuc_danh_gia"]
     search_fields = ["de_cuong_mon_hoc"]
@@ -110,3 +115,4 @@ admin_site.register(ChuanDauRaMonHoc)
 admin_site.register(HocLieu, ReferenceAdmin)
 admin_site.register(Diem, ScoreAdmin)
 admin_site.register(MucDoDapUng)
+admin_site.register(HocLieu_DeCuongMonHoc, Reference_OutlineAdmin)
