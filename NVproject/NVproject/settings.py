@@ -24,7 +24,7 @@ SECRET_KEY = 'django-insecure-m!v$2osa6d@rle(=zxt=*_ql#pt4%n5^r8gtpu7_%_%b88-qf&
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['thienvu3003.pythonanywhere.com']
 
 CKEDITOR_UPLOAD_PATH = "static/ckeditor/images/"
 
@@ -81,10 +81,10 @@ WSGI_APPLICATION = 'NVproject.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'outlinecompilationdb',
-        'USER': 'root',
+        'NAME': 'thienvu3003$outlinecompilation',
+        'USER': 'thienvu3003',
         'PASSWORD': 'Admin@123',
-        'HOST': ''  # mặc định localhost
+        'HOST': 'thienvu3003.mysql.pythonanywhere-services.com'  # mặc định localhost
     }
 }
 
@@ -102,7 +102,7 @@ import cloudinary
 cloudinary.config(
     cloud_name="dn84ltxow",
     api_key="251333144845721",
-    api_secret="YFNzWK9pM2ktEb30zBbmIfMpczs"
+    api_secret="YFNzWK9pM2ktEb30zBbmIfMpczs",
 )
 
 # Password validation
@@ -129,6 +129,10 @@ REST_FRAMEWORK = {
     )
 }
 
+OAUTH2_PROVIDER = {
+    'OAUTH2_BACKEND_CLASS': 'oauth2_provider.oauth2_backends.JSONOAuthLibCore'
+}
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
@@ -150,5 +154,5 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-CLIENT_ID = 'gyzcs1JQNcblWDEVTtZTYLKIVJTHIRaMoBgXvG9Y'
-CLIENT_SECRET = 'RP3HGEKvuRwJrN086B9XNAN7lcJXMMJk4h2t2ToHmChGJ7yDVaH27SleunLMF3eg4C73qBcHAeKAuqQnXVBpiVd6nDDEo4Wv6Vm4EdIfCJR8SH9ZwafqAp1VVVYQ6F6L'
+CLIENT_ID = 'tf0odPnGWnupvcmWCMvBrhDlYdO4guJrOuJKuUoG'
+CLIENT_SECRET = 'jT5TpF3Jrer6e3ES2eN0n5epndXyert7Dh7e3ywUBRA3gp7uFcChrp4ZolfrgJyld0SrJv9gjFYamJHPyhBCcBilA5oCjcgU7S43j6hhlnLlF7djA9wvWcAyibkIz7ou'

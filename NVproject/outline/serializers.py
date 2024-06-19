@@ -21,14 +21,6 @@ class UserSerializer(ItemSerializer):
             }
         }
 
-    def create(self, validated_data):
-        data = validated_data.copy()
-        user = User(**data)
-        user.set_password(data['password'])
-        user.save()
-
-        return user
-
 
 class FieldSerializer(serializers.ModelSerializer):
     class Meta:
@@ -71,15 +63,27 @@ class LecturerDetailSerializer(ItemSerializer):
 
 
 class SubjectSerializer(serializers.ModelSerializer):
+    mon_tien_quyet = serializers.SerializerMethodField()
+    mon_hoc_truoc = serializers.SerializerMethodField()
+    mon_song_hanh = serializers.SerializerMethodField()
     so_tin_chi = serializers.SerializerMethodField()
+
+    def get_mon_tien_quyet(self, subject):
+        return [{"ten_mon_hoc": data.ten_mon_hoc} for data in subject.mon_tien_quyet.all()]
+
+    def get_mon_hoc_truoc(self, subject):
+        return [{"ten_mon_hoc": data.ten_mon_hoc} for data in subject.mon_hoc_truoc.all()]
+
+    def get_mon_song_hanh(self, subject):
+        return [{"ten_mon_hoc": data.ten_mon_hoc} for data in subject.mon_song_hanh.all()]
 
     def get_so_tin_chi(self, obj):
         return obj.so_tin_chi_thuc_hanh + obj.so_tin_chi_ly_thuyet
 
     class Meta:
         model = MonHoc
-        fields = ['id', 'ten_mon_hoc', 'ten_mon_hoc_ta', 'so_tin_chi',
-                  'so_tin_chi_thuc_hanh', 'so_tin_chi_ly_thuyet']
+        fields = ['id', 'ten_mon_hoc', 'ten_mon_hoc_ta', 'so_tin_chi', 'ThuocKhoiKienThuc', 'mo_ta_mon_hoc',
+                  'so_tin_chi_thuc_hanh', 'so_tin_chi_ly_thuyet', 'mon_tien_quyet', 'mon_hoc_truoc', 'mon_song_hanh']
 
 
 class ChapterSerializer(serializers.ModelSerializer):
@@ -107,6 +111,7 @@ class ReferencesSerializer(serializers.ModelSerializer):
 
 
 class Reference_OutlineSerializer(serializers.ModelSerializer):
+    hoc_lieu = ReferencesSerializer()
     class Meta:
         model = HocLieu_DeCuongMonHoc
         fields = ["stt", "hoc_lieu"]
@@ -119,6 +124,7 @@ class ResponsiveLevel(serializers.ModelSerializer):
 
 
 class CourseLearningOutcomeSerializer(serializers.ModelSerializer):
+    muc_tieu_mon_hoc = CourseObjectiveSerializer()
     dap_ung = serializers.SerializerMethodField()
 
     def get_dap_ung(self, clo):
@@ -126,7 +132,7 @@ class CourseLearningOutcomeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ChuanDauRaMonHoc
-        fields = ["stt", "mo_ta", "dap_ung"]
+        fields = ["muc_tieu_mon_hoc", "stt", "mo_ta", "dap_ung"]
 
 
 class TeachingAndStudyingActivitySerializer(serializers.ModelSerializer):
@@ -138,9 +144,15 @@ class TeachingAndStudyingActivitySerializer(serializers.ModelSerializer):
 class TeachingPlanSerializer(serializers.ModelSerializer):
     chuong = ChapterSerializer()
     hoat_dong_day_va_hoc = serializers.SerializerMethodField()
-    hoc_lieu = ReferencesSerializer(many=True)
+    hoc_lieu = serializers.SerializerMethodField()
     bai_danh_gia = ScoreSerializer(many=True)
     chuan_dau_ra_mon_hoc = CourseLearningOutcomeSerializer(many=True)
+
+    def get_hoc_lieu(self, teaching_plan):
+        hoc_lieu = []
+        for r in teaching_plan.hoc_lieu.all():
+            hoc_lieu.append(Reference_OutlineSerializer(r.hoclieu_decuongmonhoc_set.all(), many=True).data)
+        return hoc_lieu
 
     def get_hoat_dong_day_va_hoc(self, teaching_plan):
         return TeachingAndStudyingActivitySerializer(teaching_plan.hoatdongdayvahoc_set.all(), many=True).data
@@ -171,11 +183,15 @@ class OutlineDetailSerializer(serializers.ModelSerializer):
     giang_vien_bien_soan = LecturerSerializer()
     co = serializers.SerializerMethodField()
     clo = serializers.SerializerMethodField()
+    r = serializers.SerializerMethodField()
     s = serializers.SerializerMethodField()
     tp = serializers.SerializerMethodField()
 
     def get_co(self, outline):
         return CourseObjectiveSerializer(outline.muctieumonhoc_set.all(), many=True).data
+
+    def get_r(self, outline):
+        return Reference_OutlineSerializer(outline.hoclieu_decuongmonhoc_set.all(), many=True).data
 
     def get_clo(self, outline):
         return [CourseLearningOutcomeSerializer(data.chuandauramonhoc_set.all(), many=True).data for data in outline.muctieumonhoc_set.all()]
@@ -189,7 +205,7 @@ class OutlineDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = DeCuongMonHoc
         fields = (OutlineSerializer.Meta.fields +
-                  ['co', 'clo', 'phuong_phap_giang_day_hoc_tap', 's', 'tp', 'quy_dinh'])
+                  ['co', 'clo', 'r', 'phuong_phap_giang_day_hoc_tap', 's', 'tp', 'quy_dinh'])
 
 
 class CommentSerializer(serializers.ModelSerializer):

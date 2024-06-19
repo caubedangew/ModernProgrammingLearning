@@ -23,7 +23,7 @@ class User(AbstractUser):
 
     def get_full_name(self):
         full_name = "%s %s" % (self.last_name, self.first_name)
-        return full_name.strip()
+        return full_name
 
     def __str__(self):
         return self.get_full_name()
@@ -53,7 +53,7 @@ class SinhVien(User):
 
 class BaseModel(models.Model):
     active = models.BooleanField(default=True)
-    created_date = models.DateTimeField(auto_now_add=True)
+    created_date = models.DateTimeField(auto_now_add=True, null=True)
     updated_date = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -115,6 +115,7 @@ class DeCuongMonHoc(BaseModel):
     giang_vien_bien_soan = models.ForeignKey(GiangVien, on_delete=models.PROTECT)
     mon_hoc = models.ForeignKey(MonHoc, on_delete=models.RESTRICT)
     quy_dinh = RichTextField()
+
 
     def __str__(self):
         return self.mon_hoc.__str__() + " - " + self.giang_vien_bien_soan.__str__() + " - " + self.created_date.year.__str__()
